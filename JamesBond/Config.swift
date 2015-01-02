@@ -20,8 +20,13 @@ let CardOverlap = CardHeight / 12
 
 let PileWidth = CardWidth + 3 * CardOverlap
 
+let PileSeparationX = (ScreenWidth - 6 * CardWidth) / 7
+let PileSeparationY = (ScreenHeight - 5 * CardHeight) / 6
+
+/*
 let PileSeparationX = (ScreenWidth - 3 * PileWidth) / 4
 let PileSeparationY = (ScreenHeight - 7 * CardHeight) / 8
+*/
 
 let MiddleSeparation = (ScreenWidth - 4 * CardWidth) / 5
 

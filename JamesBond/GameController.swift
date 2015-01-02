@@ -21,30 +21,38 @@ class GameController {
     func dealCards() {        
         for i in 0..<6 {
             let pileView = PileView(pile: gameplay.p1piles[i])
+            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (CardWidth + PileSeparationX)
+            pileView.frame.origin.y = PileSeparationY + 4 * (CardHeight + PileSeparationY)
+            /*
             pileView.frame.origin.x = PileSeparationX + CGFloat(i % 3) * (PileWidth + PileSeparationX)
             if i < 3 {
                 pileView.frame.origin.y = PileSeparationY + 5 * (CardHeight + PileSeparationY)
             } else {
                 pileView.frame.origin.y = PileSeparationY + 6 * (CardHeight + PileSeparationY)
             }
+            */
             gameView.addSubview(pileView)
         }
         
         for i in 0..<6 {
             let pileView = PileView(pile: gameplay.p2piles[i])
+            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (CardWidth + PileSeparationX)
+            pileView.frame.origin.y = PileSeparationY + 0 * (CardHeight + PileSeparationY)
+            /*
             pileView.frame.origin.x = PileSeparationX + CGFloat(i % 3) * (PileWidth + PileSeparationX)
             if i < 3 {
                 pileView.frame.origin.y = PileSeparationY
             } else {
                 pileView.frame.origin.y = PileSeparationY + (CardHeight + PileSeparationY)
             }
+            */
             gameView.addSubview(pileView)
         }
         
         for i in 0..<4 {
             let cardView = CardView(card: gameplay.middle[i])
             cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
-            cardView.frame.origin.y = PileSeparationY + 3 * (CardHeight + PileSeparationY)
+            cardView.frame.origin.y = PileSeparationY + 2 * (CardHeight + PileSeparationY)
             gameView.addSubview(cardView)
         }
     }

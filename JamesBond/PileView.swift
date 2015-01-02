@@ -20,7 +20,7 @@ class PileView: UIView {
         self.pile = pile
         super.init(frame: CGRectMake(0, 0, PileWidth, CardHeight))
         let card = pile[0]
-        let cardView = CardView(card: card, faceUp: !pile.isCompleted)
+        let cardView = CardView(card: card, faceUp: pile.isCompleted)
         self.addSubview(cardView)
 
         /*
