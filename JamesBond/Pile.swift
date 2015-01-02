@@ -19,6 +19,7 @@ class Pile {
     func append(card: Card) {
         pile.append(card)
         if pile.count == 4 {
+            
             pile.sort({ (lh: Card, rh: Card) in
                 if (lh.rank != rh.rank) {
                     return lh.rank < rh.rank
@@ -40,5 +41,19 @@ class Pile {
     
     func removeAtIndex(index: Int) {
         pile.removeAtIndex(index)
+        pile.reserveCapacity(4)
+    }
+    
+    func insert(card: Card, atIndex: Int) {
+        pile.insert(card, atIndex: atIndex)
+        isCompleted = {
+            let rank = self.pile[0].rank
+            for card in self.pile {
+                if card.rank != rank {
+                    return false
+                }
+            }
+            return true
+        }()
     }
 }

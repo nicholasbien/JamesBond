@@ -35,10 +35,19 @@ class Gameplay {
         }
     }
 
-    func exchange(pile: Pile, index: Int, middleIndex: Int) {
-        let temp = pile[index]
-        pile.removeAtIndex(index)
-        pile.append(middle[middleIndex])
+    func exchange(pile: Pile, pileIndex: Int, middleIndex: Int) {
+        let temp = pile[pileIndex]
+        pile.removeAtIndex(pileIndex)
+        pile.insert(middle[middleIndex], atIndex: pileIndex)
         middle[middleIndex] = temp
+    }
+    
+    func swap(pile: Pile, pileIndex1: Int, pileIndex2: Int) {
+        let card1 = pile[pileIndex1]
+        let card2 = pile[pileIndex2]
+        pile.removeAtIndex(pileIndex1)
+        pile.insert(card2, atIndex: pileIndex1)
+        pile.removeAtIndex(pileIndex2)
+        pile.insert(card1, atIndex: pileIndex2)
     }
 }

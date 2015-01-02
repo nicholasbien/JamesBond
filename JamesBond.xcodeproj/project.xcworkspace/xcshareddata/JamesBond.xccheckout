@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>ECD3F178-80F5-418E-A98D-A780050EAC76</string>
+	<key>IDESourceControlProjectName</key>
+	<string>JamesBond</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>46A2FBD7A99671BB0B26078216C9305D67040302</key>
+		<string>https://github.com/nicholasbien/JamesBond.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>JamesBond.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>46A2FBD7A99671BB0B26078216C9305D67040302</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/nicholasbien/JamesBond.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>46A2FBD7A99671BB0B26078216C9305D67040302</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>46A2FBD7A99671BB0B26078216C9305D67040302</string>
+			<key>IDESourceControlWCCName</key>
+			<string>JamesBond</string>
+		</dict>
+	</array>
+</dict>
+</plist>

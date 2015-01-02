@@ -8,13 +8,18 @@
 
 import Foundation
 import UIKit
+import QuartzCore
+
+protocol CardSelectProtocol {
+    var currentCard: CardView? {get set}
+    func cardSelected(cardView: CardView)
+}
 
 class CardView: UIImageView {
     let card: Card
     var faceUp: Bool
     
-    private var xOffset: CGFloat = 0.0
-    private var yOffset: CGFloat = 0.0
+    var cardSelectDelegate: CardSelectProtocol?
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -49,13 +54,15 @@ class CardView: UIImageView {
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        let point = touches.anyObject()!.locationInView(self.superview)
-        xOffset = point.x - self.center.x
-        yOffset = point.y - self.center.y
+        cardSelectDelegate?.cardSelected(self)
     }
     
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        let point = touches.anyObject()!.locationInView(self.superview)
-        self.center = CGPointMake(point.x - xOffset, point.y - yOffset)
+    func displaySelectedCard() {
+        self.layer.borderColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), BorderColor)
+        self.layer.borderWidth = BorderWidth
+    }
+    
+    func displayUnselectedCard() {
+        self.layer.borderWidth = 0
     }
 }

@@ -31,4 +31,10 @@ let PileSeparationY = (ScreenHeight - 7 * CardHeight) / 8
 let MiddleSeparation = (ScreenWidth - 4 * CardWidth) / 5
 
 let BackgroundImage = "table2x"
-let CardBackImage = "vlad"
+let CardBackImage = "cardBack"
+
+let BorderColor: [CGFloat] = [1.0, 1.0, 0.0, 1.0] // yellow
+let BorderWidth: CGFloat = 2.0
+
+let PileBorderColor: [CGFloat] = [0.0, 0.0, 0.0, 1.0] // black
+let PileBorderWidth = BorderWidth

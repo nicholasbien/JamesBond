@@ -8,19 +8,30 @@
 
 import Foundation
 import UIKit
+import QuartzCore
+
+protocol PileDisplayProtocol {
+    var currentPile: PileView? { get set }
+    func pileSelected(pileView: PileView)
+}
 
 class PileView: UIView {
     let pile: Pile
+    var cardView: CardView
+    
+    var pileDisplayDelegate: PileDisplayProtocol?
     
     required init(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     init(pile: Pile) {
+        
         self.pile = pile
-        super.init(frame: CGRectMake(0, 0, PileWidth, CardHeight))
         let card = pile[0]
-        let cardView = CardView(card: card, faceUp: pile.isCompleted)
+        self.cardView = CardView(card: card, faceUp: false)
+        self.cardView.userInteractionEnabled = false
+        super.init(frame: CGRectMake(0, 0, CardWidth, CardHeight))
         self.addSubview(cardView)
 
         /*
@@ -34,5 +45,27 @@ class PileView: UIView {
             self.userInteractionEnabled = true
         }
         */
+    }
+    
+    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+        pileDisplayDelegate?.pileSelected(self)
+    }
+    
+    func displayEmptyPile() {
+        self.cardView.removeFromSuperview()
+        self.layer.borderColor = CGColorCreate(CGColorSpaceCreateDeviceRGB(), PileBorderColor)
+        self.layer.borderWidth = PileBorderWidth
+    }
+    
+    func displayFullPile() {
+        self.layer.borderWidth = 0
+        if !pile.isCompleted {
+            self.addSubview(cardView)
+        } else {
+            let card = pile[0]
+            self.cardView = CardView(card: card, faceUp: true)
+            self.addSubview(cardView)
+            self.userInteractionEnabled = false
+        }
     }
 }
