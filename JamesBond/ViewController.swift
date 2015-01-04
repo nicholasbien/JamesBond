@@ -19,7 +19,8 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        let gameView = UIView(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight))
+        let gameView = GameView()
+        gameView.controller = self.controller
         let background = UIImage(named: BackgroundImage)
         let backgroundView = UIImageView(image: background)
         self.view.addSubview(backgroundView)

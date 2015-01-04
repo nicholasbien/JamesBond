@@ -14,6 +14,7 @@
 		771F402C1A56615E004F4E7C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 771F402A1A56615E004F4E7C /* LaunchScreen.xib */; };
 		771F40381A56615E004F4E7C /* JamesBondTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 771F40371A56615E004F4E7C /* JamesBondTests.swift */; };
 		779CB9CC1A574349007B33A4 /* cardBack.png in Resources */ = {isa = PBXBuildFile; fileRef = 779CB9CB1A574349007B33A4 /* cardBack.png */; };
+		779CB9D61A59F22D007B33A4 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 779CB9D51A59F22C007B33A4 /* GameView.swift */; };
 		77F8F58A1A56620F007E55C9 /* Card.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8F5891A56620F007E55C9 /* Card.swift */; };
 		77F8F58E1A56621E007E55C9 /* Deck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8F58B1A56621E007E55C9 /* Deck.swift */; };
 		77F8F58F1A56621E007E55C9 /* Gameplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8F58C1A56621E007E55C9 /* Gameplay.swift */; };
@@ -170,6 +171,7 @@
 		771F40361A56615E004F4E7C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		771F40371A56615E004F4E7C /* JamesBondTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JamesBondTests.swift; sourceTree = "<group>"; };
 		779CB9CB1A574349007B33A4 /* cardBack.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cardBack.png; sourceTree = "<group>"; };
+		779CB9D51A59F22C007B33A4 /* GameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		77F8F5891A56620F007E55C9 /* Card.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Card.swift; sourceTree = "<group>"; };
 		77F8F58B1A56621E007E55C9 /* Deck.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deck.swift; sourceTree = "<group>"; };
 		77F8F58C1A56621E007E55C9 /* Gameplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Gameplay.swift; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 			children = (
 				77F8F5911A56622C007E55C9 /* CardView.swift */,
 				77F8F6CF1A5671CD007E55C9 /* PileView.swift */,
+				779CB9D51A59F22C007B33A4 /* GameView.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1310,6 +1313,7 @@
 				77F8F5961A5663F9007E55C9 /* Config.swift in Sources */,
 				771F40241A56615E004F4E7C /* ViewController.swift in Sources */,
 				77F8F6D01A5671CD007E55C9 /* PileView.swift in Sources */,
+				779CB9D61A59F22D007B33A4 /* GameView.swift in Sources */,
 				77F8F58A1A56620F007E55C9 /* Card.swift in Sources */,
 				77F8F5901A56621E007E55C9 /* Pile.swift in Sources */,
 				77F8F5941A566237007E55C9 /* GameController.swift in Sources */,

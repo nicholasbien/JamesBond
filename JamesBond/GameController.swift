@@ -218,19 +218,16 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
 //////////////////// AI
     
     func basicAI() {
-        while (!gameplay.gameIsOver()) {
-            let pileNumber = Int(arc4random_uniform(UInt32(5)))
-            let pile = gameplay.p2piles[pileNumber]
-            let pileIndex = Int(arc4random_uniform(UInt32(3)))
-            let middleIndex = Int(arc4random_uniform(UInt32(3)))
-            gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
-            if pile.isCompleted {
-                p2pileViews[pileNumber] = PileView(pile: pile)
-                p2pileViews[pileNumber].displayFullPile()
-            }
-            displayMiddle()
-            sleep(2)
+        let pileNumber = Int(arc4random_uniform(UInt32(5)))
+        let pile = gameplay.p2piles[pileNumber]
+        let pileIndex = Int(arc4random_uniform(UInt32(3)))
+        let middleIndex = Int(arc4random_uniform(UInt32(3)))
+        gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
+        if pile.isCompleted {
+            p2pileViews[pileNumber] = PileView(pile: pile)
+            p2pileViews[pileNumber].displayFullPile()
         }
+        displayMiddle()
     }
     
     
