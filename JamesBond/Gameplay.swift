@@ -50,4 +50,17 @@ class Gameplay {
         pile.removeAtIndex(pileIndex2)
         pile.insert(card1, atIndex: pileIndex2)
     }
+    
+    func gameIsOver() -> Bool {
+        return allPilesCompleted(p1piles) || allPilesCompleted(p2piles)
+    }
+    
+    func allPilesCompleted(piles: [Pile]) -> Bool {
+        for i in 0..<6 {
+            if !piles[i].isCompleted {
+                return false
+            }
+        }
+        return true
+    }
 }

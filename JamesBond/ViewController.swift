@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-    private var controller: GameController
+    var controller: GameController
     
     required init(coder aDecoder: NSCoder) {
         controller = GameController()
@@ -27,7 +27,7 @@ class ViewController: UIViewController {
         controller.gameView = gameView
         controller.dealCards()
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

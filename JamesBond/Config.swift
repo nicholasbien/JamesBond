@@ -13,15 +13,17 @@ import UIKit
 let ScreenWidth = UIScreen.mainScreen().bounds.size.width
 let ScreenHeight = UIScreen.mainScreen().bounds.size.height
 
-let CardHeight = ScreenHeight / 8
+let CardHeight = ScreenHeight / 6
 let CardWidth = 2 * CardHeight / 3
 
 let CardOverlap = CardHeight / 12
 
-let PileWidth = CardWidth + 3 * CardOverlap
+let PileHeight = ScreenHeight / 8
+let PileWidth = 2 * PileHeight / 3
 
-let PileSeparationX = (ScreenWidth - 6 * CardWidth) / 7
-let PileSeparationY = (ScreenHeight - 5 * CardHeight) / 6
+let PileSeparationX = (ScreenWidth - 6 * PileWidth) / 7
+//let PileSeparationY = (ScreenHeight - 3 * CardHeight - 2 * PileHeight) / 6
+let PileSeparationY = (ScreenHeight - 2 * CardHeight - 2 * PileHeight) / 5
 
 /*
 let PileSeparationX = (ScreenWidth - 3 * PileWidth) / 4

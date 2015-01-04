@@ -24,6 +24,8 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
     var currentCard: CardView?
     var currentPile: PileView?
     
+    var p2currentPile: PileView?
+    
     init() {
         gameplay = Gameplay()
     }
@@ -31,8 +33,8 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
     func dealCards() {        
         for i in 0..<6 {
             let pileView = PileView(pile: gameplay.p1piles[i])
-            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (CardWidth + PileSeparationX)
-            pileView.frame.origin.y = PileSeparationY + 4 * (CardHeight + PileSeparationY)
+            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (PileWidth + PileSeparationX)
+            pileView.frame.origin.y = 2 * CardHeight + PileHeight + 4 * PileSeparationY
             /*
             pileView.frame.origin.x = PileSeparationX + CGFloat(i % 3) * (PileWidth + PileSeparationX)
             if i < 3 {
@@ -50,8 +52,8 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         
         for i in 0..<6 {
             let pileView = PileView(pile: gameplay.p2piles[i])
-            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (CardWidth + PileSeparationX)
-            pileView.frame.origin.y = PileSeparationY + 0 * (CardHeight + PileSeparationY)
+            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (PileWidth + PileSeparationX)
+            pileView.frame.origin.y = PileSeparationY
             /*
             pileView.frame.origin.x = PileSeparationX + CGFloat(i % 3) * (PileWidth + PileSeparationX)
             if i < 3 {
@@ -67,6 +69,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             gameView.addSubview(pileView)
         }
         displayMiddle()
+        //displayP2Pile()
     }
     
     func displayMiddle() {
@@ -77,7 +80,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         for i in 0..<4 {
             let cardView = CardView(card: gameplay.middle[i])
             cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
-            cardView.frame.origin.y = PileSeparationY + 2 * (CardHeight + PileSeparationY)
+            cardView.frame.origin.y = PileHeight + 2 * PileSeparationY
             cardView.cardSelectDelegate = self
             middleDisplay.append(cardView)
         }
@@ -96,7 +99,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             for i in 0..<4 {
                 let cardView = CardView(card: self.currentPile!.pile[i])
                 cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
-                cardView.frame.origin.y = PileSeparationY + 3 * (CardHeight + PileSeparationY)
+                cardView.frame.origin.y = CardHeight + PileHeight + 3 * PileSeparationY
                 p1pileDisplay.append(cardView)
             }
             for cardView in p1pileDisplay {
@@ -104,6 +107,20 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                 cardView.cardSelectDelegate = self
             }
         }
+    }
+    
+    func displayP2Pile() {
+        p2pileDisplay.removeAll()
+        for i in 0..<4 {
+            let cardView = CardView(card: self.p2currentPile!.pile[i])
+            //cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
+            //cardView.frame.origin.y = PileHeight + 2 * PileSeparationY
+            cardView.userInteractionEnabled = false
+            p2pileDisplay.append(cardView)
+        }
+        /*for cardView in p2pileDisplay {
+            gameView.addSubview(cardView)
+        }*/
     }
     
     func pileSelected(pileView: PileView) {
@@ -183,5 +200,104 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         let pileIndex2 = find(p1pileDisplay, currentCard!)!
         gameplay.swap(pile, pileIndex1: pileIndex1, pileIndex2: pileIndex2)
         displayP1Pile()
+    }
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////// AI
+    
+    func basicAI() {
+        while (!gameplay.gameIsOver()) {
+            let pileNumber = Int(arc4random_uniform(UInt32(5)))
+            let pile = gameplay.p2piles[pileNumber]
+            let pileIndex = Int(arc4random_uniform(UInt32(3)))
+            let middleIndex = Int(arc4random_uniform(UInt32(3)))
+            gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
+            if pile.isCompleted {
+                p2pileViews[pileNumber] = PileView(pile: pile)
+                p2pileViews[pileNumber].displayFullPile()
+            }
+            displayMiddle()
+            sleep(2)
+        }
+    }
+    
+    
+    
+
+    func mostCommonRankIn(pile: Pile) -> Int {
+        var counts = [0, 0, 0, 0]
+        for i in 0..<4 {
+            let rank = pile[i].rank
+            for j in (i + 1)..<4 {
+                if pile[j].rank == rank {
+                    ++counts[i]
+                }
+            }
+        }
+        var max = 0
+        for i in 0..<4 {
+            if counts[i] > max {
+                max = counts[i]
+            }
+        }
+        return pile[max].rank
+    }
+
+    func indexOf(rank: Int, group: [Card]) -> Int {
+        for i in 0..<4 {
+            if group[i].rank == rank {
+                return i
+            }
+        }
+        return -1
+    }
+
+    func p2Finished() -> Bool {
+        for pile in gameplay.p2piles {
+            if !pile.isCompleted {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func aiLoop() {
+        for i in 0..<20 {
+            for i in 0..<6 {
+                let pile = gameplay.p2piles[i]
+                let target = mostCommonRankIn(pile)
+                let index = indexOf(target, group: gameplay.middle)
+                if index != -1 {
+                    for j in 0..<4 {
+                        if pile[j].rank != target {
+                            //exchange(pile, j, index)
+                        }
+                    }
+                }
+                for j in 0..<6 {
+                    if i != j {
+                        //let index = indexOf(target, gameplay.p2piles[j].pile)
+                        if index != -1 {
+                            //exchange(p2piles[j], index, Int(arc4random_uniform(UInt32(3))))
+                        }
+                    }
+                }
+            }
+            if p2Finished() {
+                break
+            }
+        }
     }
 }
