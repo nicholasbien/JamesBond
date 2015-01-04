@@ -228,6 +228,9 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             p2pileViews[pileNumber].displayFullPile()
         }
         displayMiddle()
+        if gameplay.gameIsOver() {
+            println("The game has ended")
+        }
     }
     
     

@@ -22,6 +22,5 @@ class GameView: UIView {
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         controller?.basicAI()
-        sleep(2)
     }
 }
