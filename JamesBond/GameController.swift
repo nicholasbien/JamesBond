@@ -215,12 +215,13 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             let label = UILabel(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight))
             label.center = CGPointMake(ScreenWidth / 2, ScreenHeight / 2)
             label.textColor = UIColor.whiteColor()
+            label.font = UIFont(name: "Cochin-Bold", size: 20)
             if gameplay.p1Finished() {
-                message = "YOU WIN"
+                message = "You Win"
                 println(message)
                 label.text = message
             } else {
-                message = "YOU LOSE"
+                message = "You Lose"
                 println(message)
                 label.text = message
             }
@@ -256,7 +257,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                     for pileIndex in 0..<4 {
                         if pile[pileIndex].rank != target {
                             self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
-                            self.p2exchangeMade(pileNumber)
+                            self.p2exchangeMade(pileNumber, middleIndex: middleIndex)
                         }
                     }
                 } else {
@@ -267,7 +268,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                                 println("placing card in middle")
                                 let middleIndex = Int(arc4random_uniform(UInt32(4)))
                                 self.gameplay.exchange(self.gameplay.p2piles[otherPileNumber], pileIndex: pileIndex,  middleIndex: middleIndex)
-                                self.p2exchangeMade(otherPileNumber)
+                                self.p2exchangeMade(otherPileNumber, middleIndex: middleIndex)
                             } else if Int(arc4random_uniform(UInt32(3))) == 0 {
                                 let pileNumber = Int(arc4random_uniform(UInt32(6)))
                                 let pile = self.gameplay.p2piles[pileNumber]
@@ -276,7 +277,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                                     let middleIndex = Int(arc4random_uniform(UInt32(4)))
                                     println("exchanging random card")
                                     self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex:    middleIndex)
-                                    self.p2exchangeMade(pileNumber)
+                                    self.p2exchangeMade(pileNumber, middleIndex: middleIndex)
                                 }
                             }
                         }
@@ -287,8 +288,11 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         })
     }
     
-    func p2exchangeMade(pileNumber: Int) {
+    func p2exchangeMade(pileNumber: Int, middleIndex: Int) {
         dispatch_async(dispatch_get_main_queue(), {() -> () in
+            if self.middleDisplay[middleIndex] == self.currentCard {
+                self.currentCard = nil
+            }
             let pile = self.gameplay.p2piles[pileNumber]
             if pile.isCompleted {
                 println("pile completed")
