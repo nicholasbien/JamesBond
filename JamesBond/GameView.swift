@@ -20,7 +20,7 @@ class GameView: UIView {
         super.init(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight))
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        controller?.basicAI()
-    }
+    //override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    //    controller?.basicAI()
+    //}
 }

@@ -63,4 +63,12 @@ class Gameplay {
         }
         return true
     }
+    
+    func p1Finished() -> Bool {
+        return allPilesCompleted(p1piles)
+    }
+    
+    func p2Finished() -> Bool {
+        return allPilesCompleted(p2piles)
+    }
 }

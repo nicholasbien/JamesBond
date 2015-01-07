@@ -78,10 +78,14 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         }
         middleDisplay.removeAll()
         for i in 0..<4 {
-            let cardView = CardView(card: gameplay.middle[i])
+            var cardView = CardView(card: gameplay.middle[i])
             cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
             cardView.frame.origin.y = PileHeight + 2 * PileSeparationY
             cardView.cardSelectDelegate = self
+            if cardView.card.rank == currentCard?.card.rank && cardView.card.suit == currentCard?.card.suit {
+                cardView.displaySelectedCard()
+                currentCard = cardView
+            }
             middleDisplay.append(cardView)
         }
         for cardView in middleDisplay {
@@ -191,6 +195,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         }
         displayMiddle()
         displayP1Pile()
+        checkForGameOver()
     }
     
     func swap(cardView: CardView) {
@@ -200,6 +205,27 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         let pileIndex2 = find(p1pileDisplay, currentCard!)!
         gameplay.swap(pile, pileIndex1: pileIndex1, pileIndex2: pileIndex2)
         displayP1Pile()
+    }
+    
+    func checkForGameOver() {
+        if self.gameplay.gameIsOver() {
+            gameView.userInteractionEnabled = false
+            println("The game has ended")
+            var message = ""
+            let label = UILabel(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight))
+            label.center = CGPointMake(ScreenWidth / 2, ScreenHeight / 2)
+            label.textColor = UIColor.whiteColor()
+            if gameplay.p1Finished() {
+                message = "YOU WIN"
+                println(message)
+                label.text = message
+            } else {
+                message = "YOU LOSE"
+                println(message)
+                label.text = message
+            }
+            gameView.addSubview(label)
+        }
     }
     
 
@@ -218,23 +244,66 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
 //////////////////// AI
     
     func basicAI() {
-        let pileNumber = Int(arc4random_uniform(UInt32(5)))
-        let pile = gameplay.p2piles[pileNumber]
-        let pileIndex = Int(arc4random_uniform(UInt32(3)))
-        let middleIndex = Int(arc4random_uniform(UInt32(3)))
-        gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
-        if pile.isCompleted {
-            p2pileViews[pileNumber] = PileView(pile: pile)
-            p2pileViews[pileNumber].displayFullPile()
-        }
-        displayMiddle()
-        if gameplay.gameIsOver() {
-            println("The game has ended")
-        }
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
+            while (!self.gameplay.gameIsOver()) {
+                let pileNumber = Int(arc4random_uniform(UInt32(6)))
+                let pile = self.gameplay.p2piles[pileNumber]
+                
+                let target = self.mostCommonRankIn(pile)
+                let middleIndex = self.indexOf(target, group: self.gameplay.middle)
+                if middleIndex != -1 {
+                    println("seeking middle card")
+                    for pileIndex in 0..<4 {
+                        if pile[pileIndex].rank != target {
+                            self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
+                            self.p2exchangeMade(pileNumber)
+                        }
+                    }
+                } else {
+                    for otherPileNumber in 0..<6 {
+                        if pileNumber != otherPileNumber {
+                            let pileIndex = self.indexOf(target, group: self.gameplay.p2piles[otherPileNumber].pile)
+                            if pileIndex != -1 {
+                                println("placing card in middle")
+                                let middleIndex = Int(arc4random_uniform(UInt32(4)))
+                                self.gameplay.exchange(self.gameplay.p2piles[otherPileNumber], pileIndex: pileIndex,  middleIndex: middleIndex)
+                                self.p2exchangeMade(otherPileNumber)
+                            } else if Int(arc4random_uniform(UInt32(3))) == 0 {
+                                let pileNumber = Int(arc4random_uniform(UInt32(6)))
+                                let pile = self.gameplay.p2piles[pileNumber]
+                                if !pile.isCompleted {
+                                    let pileIndex = Int(arc4random_uniform(UInt32(4)))
+                                    let middleIndex = Int(arc4random_uniform(UInt32(4)))
+                                    println("exchanging random card")
+                                    self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex:    middleIndex)
+                                    self.p2exchangeMade(pileNumber)
+                                }
+                            }
+                        }
+                    }
+                }
+                usleep(DelayTime)
+            }
+        })
     }
     
-    
-    
+    func p2exchangeMade(pileNumber: Int) {
+        dispatch_async(dispatch_get_main_queue(), {() -> () in
+            let pile = self.gameplay.p2piles[pileNumber]
+            if pile.isCompleted {
+                println("pile completed")
+                let position = self.p2pileViews[pileNumber].frame.origin
+                self.p2pileViews[pileNumber].removeFromSuperview()
+                let pileView = PileView(pile: pile)
+                self.p2pileViews[pileNumber] = pileView
+                pileView.frame.origin = position
+                self.gameView.addSubview(pileView)
+            }
+            self.displayMiddle()
+            self.checkForGameOver()
+        })
+        usleep(DelayTime)
+    }
 
     func mostCommonRankIn(pile: Pile) -> Int {
         var counts = [0, 0, 0, 0]
@@ -252,7 +321,8 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                 max = counts[i]
             }
         }
-        return pile[max].rank
+        let index = find(counts, max)!
+        return pile[index].rank
     }
 
     func indexOf(rank: Int, group: [Card]) -> Int {

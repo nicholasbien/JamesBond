@@ -32,7 +32,7 @@ class PileView: UIView {
         self.cardView = CardView(card: card, faceUp: false, height: PileHeight)
         self.cardView.userInteractionEnabled = false
         super.init(frame: CGRectMake(0, 0, PileWidth, PileHeight))
-        self.addSubview(cardView)
+        displayFullPile()
 
         /*
         for i in 0..<4 {

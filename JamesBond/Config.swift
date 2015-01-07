@@ -40,3 +40,5 @@ let BorderWidth: CGFloat = 2.0
 
 let PileBorderColor: [CGFloat] = [0.0, 0.0, 0.0, 1.0] // black
 let PileBorderWidth = BorderWidth
+
+let DelayTime: useconds_t = 1000000 // in microseconds
