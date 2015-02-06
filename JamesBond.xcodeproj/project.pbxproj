@@ -42,7 +42,6 @@
 		77F8F6CD1A566E82007E55C9 /* table1x.png in Resources */ = {isa = PBXBuildFile; fileRef = 77F8F6521A566E82007E55C9 /* table1x.png */; };
 		77F8F6CE1A566E82007E55C9 /* table2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 77F8F6531A566E82007E55C9 /* table2x.png */; };
 		77F8F6D01A5671CD007E55C9 /* PileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77F8F6CF1A5671CD007E55C9 /* PileView.swift */; };
-		77F8F6D21A567E34007E55C9 /* vlad.png in Resources */ = {isa = PBXBuildFile; fileRef = 77F8F6D11A567E34007E55C9 /* vlad.png */; };
 		F53DA2BF1A5E4D6000343BCD /* 10c.png in Resources */ = {isa = PBXBuildFile; fileRef = F53DA28B1A5E4D6000343BCD /* 10c.png */; };
 		F53DA2C01A5E4D6000343BCD /* 10d.png in Resources */ = {isa = PBXBuildFile; fileRef = F53DA28C1A5E4D6000343BCD /* 10d.png */; };
 		F53DA2C11A5E4D6000343BCD /* 10h.png in Resources */ = {isa = PBXBuildFile; fileRef = F53DA28D1A5E4D6000343BCD /* 10h.png */; };
@@ -147,7 +146,6 @@
 		77F8F6521A566E82007E55C9 /* table1x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = table1x.png; sourceTree = "<group>"; };
 		77F8F6531A566E82007E55C9 /* table2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = table2x.png; sourceTree = "<group>"; };
 		77F8F6CF1A5671CD007E55C9 /* PileView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PileView.swift; sourceTree = "<group>"; };
-		77F8F6D11A567E34007E55C9 /* vlad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vlad.png; sourceTree = "<group>"; };
 		F53DA28B1A5E4D6000343BCD /* 10c.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 10c.png; sourceTree = "<group>"; };
 		F53DA28C1A5E4D6000343BCD /* 10d.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 10d.png; sourceTree = "<group>"; };
 		F53DA28D1A5E4D6000343BCD /* 10h.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 10h.png; sourceTree = "<group>"; };
@@ -322,7 +320,6 @@
 			isa = PBXGroup;
 			children = (
 				779CB9CB1A574349007B33A4 /* cardBack.png */,
-				77F8F6D11A567E34007E55C9 /* vlad.png */,
 				F53DA28A1A5E4D6000343BCD /* Cards_NewNames */,
 				77F8F5971A566E82007E55C9 /* Cards_Background */,
 			);
@@ -663,7 +660,6 @@
 				77F8F6C71A566E82007E55C9 /* Contents.json in Resources */,
 				F53DA2E51A5E4D6000343BCD /* 6h.png in Resources */,
 				F53DA2CD1A5E4D6000343BCD /* 13h.png in Resources */,
-				77F8F6D21A567E34007E55C9 /* vlad.png in Resources */,
 				F53DA2F01A5E4D6000343BCD /* 9d.png in Resources */,
 				77F8F6561A566E82007E55C9 /* Contents.json in Resources */,
 			);
