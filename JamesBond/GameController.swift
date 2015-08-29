@@ -30,55 +30,62 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         gameplay = Gameplay()
     }
     
+    func getMiddlePosition(index: Int) -> CGPoint {
+        let x = MiddleSeparation + CGFloat(index) * (CardWidth + MiddleSeparation)
+        let y = PileHeight + 2 * PileSeparationY
+        return CGPoint(x: x, y: y)
+    }
+    
+    func getP1PilePosition(index: Int) -> CGPoint {
+        let x = PileSeparationX + CGFloat(index) * (PileWidth + PileSeparationX)
+        let y = 2 * CardHeight + PileHeight + 4 * PileSeparationY
+        return CGPoint(x: x, y: y)
+    }
+    
+    func getP2PilePosition(index: Int) -> CGPoint {
+        let x = PileSeparationX + CGFloat(index) * (PileWidth + PileSeparationX)
+        let y = PileSeparationY
+        return CGPoint(x: x, y: y)
+    }
+    
+    func getP1CardPosition(index: Int) -> CGPoint {
+        let x = MiddleSeparation + CGFloat(index) * (CardWidth + MiddleSeparation)
+        let y = CardHeight + PileHeight + 3 * PileSeparationY
+        return CGPoint(x: x, y: y)
+    }
+    
     func dealCards() {        
         for i in 0..<6 {
             let pileView = PileView(pile: gameplay.p1piles[i])
-            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (PileWidth + PileSeparationX)
-            pileView.frame.origin.y = 2 * CardHeight + PileHeight + 4 * PileSeparationY
-            /*
-            pileView.frame.origin.x = PileSeparationX + CGFloat(i % 3) * (PileWidth + PileSeparationX)
-            if i < 3 {
-                pileView.frame.origin.y = PileSeparationY + 5 * (CardHeight + PileSeparationY)
-            } else {
-                pileView.frame.origin.y = PileSeparationY + 6 * (CardHeight + PileSeparationY)
-            }
-            */
+            pileView.frame.origin = getP1PilePosition(i)
             pileView.pileDisplayDelegate = self
             p1pileViews.append(pileView)
-        }
-        for pileView in p1pileViews {
             gameView.addSubview(pileView)
         }
-        
         for i in 0..<6 {
             let pileView = PileView(pile: gameplay.p2piles[i])
-            pileView.frame.origin.x = PileSeparationX + CGFloat(i) * (PileWidth + PileSeparationX)
-            pileView.frame.origin.y = PileSeparationY
-            /*
-            pileView.frame.origin.x = PileSeparationX + CGFloat(i % 3) * (PileWidth + PileSeparationX)
-            if i < 3 {
-                pileView.frame.origin.y = PileSeparationY
-            } else {
-                pileView.frame.origin.y = PileSeparationY + (CardHeight + PileSeparationY)
-            }
-            */
+            pileView.frame.origin = getP2PilePosition(i)
             pileView.userInteractionEnabled = false
             p2pileViews.append(pileView)
-        }
-        for pileView in p2pileViews {
             gameView.addSubview(pileView)
         }
-        displayMiddle()
-        //displayP2Pile()
-    }
-    
-    func displayMiddle() {
-        for cardView in middleDisplay {
-            cardView.removeFromSuperview()
-        }
-        middleDisplay.removeAll()
         for i in 0..<4 {
-            var cardView = CardView(card: gameplay.middle[i])
+            let cardView = CardView(card: gameplay.middle[i])
+            cardView.frame.origin = self.getMiddlePosition(i)
+            middleDisplay.append(cardView)
+            gameView.addSubview(cardView)
+            cardView.cardSelectDelegate = self
+        }
+    }
+    /*
+    func displayMiddle() {
+        for i in 0..<4 {
+            let current = middleDisplay[i].card
+            let next = gameplay.middle[i]
+            if current.rank != next.rank || next.suit != next.suit {
+                let cardView = CardView(card: gameplay.middle[i])
+            }
+            let cardView = CardView(card: gameplay.middle[i])
             cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
             cardView.frame.origin.y = PileHeight + 2 * PileSeparationY
             cardView.cardSelectDelegate = self
@@ -93,17 +100,34 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             cardView.cardSelectDelegate = self
         }
     }
+    */
     
-    func displayP1Pile() {
-        for cardView in p1pileDisplay {
-            cardView.removeFromSuperview()
+    func displayP1Pile(pileView: PileView) {
+        let pileNumber = find(p1pileViews, pileView)
+        if self.currentPile != nil {
+            for cardView in p1pileDisplay {
+                UIView.animateWithDuration(0.25, animations: {
+                    if self.currentPile != nil {
+                        cardView.frame = self.currentPile!.frame
+                    }
+                }, completion: { finished in
+                    UIView.animateWithDuration(0.1, animations: {
+                        cardView.alpha = 0.0
+                    }, completion: { finished in
+                        cardView.removeFromSuperview()
+                    })
+                })
+            }
         }
         p1pileDisplay.removeAll()
-        if currentPile != nil {
+        if pileView != self.currentPile {
             for i in 0..<4 {
-                let cardView = CardView(card: self.currentPile!.pile[i])
-                cardView.frame.origin.x = MiddleSeparation + CGFloat(i) * (CardWidth + MiddleSeparation)
-                cardView.frame.origin.y = CardHeight + PileHeight + 3 * PileSeparationY
+                let cardView = CardView(card: pileView.pile[i])
+                cardView.frame.size = pileView.frame.size
+                cardView.frame.origin = getP1PilePosition(pileNumber!)
+                UIView.animateWithDuration(0.25, animations: {
+                    cardView.frame = CGRect(origin: self.getP1CardPosition(i), size: CGSize(width: 2 * CardHeight / 3, height: CardHeight))
+                })
                 p1pileDisplay.append(cardView)
             }
             for cardView in p1pileDisplay {
@@ -128,7 +152,8 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
     }
     
     func pileSelected(pileView: PileView) {
-        if self.currentPile? != pileView {
+        displayP1Pile(pileView)
+        if self.currentPile != pileView {
             if currentPile != nil {
                 currentPile?.displayFullPile()
             }
@@ -138,7 +163,6 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             currentPile?.displayFullPile()
             self.currentPile = nil
         }
-        displayP1Pile()
     }
     
     func cardSelected(cardView: CardView) {
@@ -182,19 +206,30 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
     func exchange(cardView: CardView) {
         let pileNumber = find(p1pileViews, self.currentPile!)!
         let pile = gameplay.p1piles[pileNumber]
-        if let middleIndex = find(middleDisplay, self.currentCard!) {
-            let pileIndex = find(p1pileDisplay, cardView)!
-            gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
-        } else if let middleIndex = find(middleDisplay, cardView) {
-            let pileIndex = find(p1pileDisplay, self.currentCard!)!
-            gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
+        var middleIndex = find(middleDisplay, self.currentCard!)
+        print(middleIndex)
+        var pileIndex: Int?
+        if middleIndex != nil {
+            pileIndex = find(self.p1pileDisplay, cardView)!
+        } else {
+            middleIndex = find(middleDisplay, cardView)!
+            pileIndex = find(p1pileDisplay, self.currentCard!)!
         }
+        gameplay.exchange(pile, pileIndex: pileIndex!, middleIndex: middleIndex!)
+        UIView.animateWithDuration(0.25, animations: {
+            self.p1pileDisplay[pileIndex!].frame.origin = self.getMiddlePosition(middleIndex!)
+            self.middleDisplay[middleIndex!].frame.origin = self.getP1CardPosition(pileIndex!)
+        })
+        let temp = p1pileDisplay[pileIndex!]
+        p1pileDisplay[pileIndex!] = middleDisplay[middleIndex!]
+        middleDisplay[middleIndex!] = temp
+
         if pile.isCompleted {
             self.pileSelected(currentPile!)
             currentPile = nil
         }
-        displayMiddle()
-        displayP1Pile()
+        //displayMiddle()
+        //displayP1Pile()
         checkForGameOver()
     }
     
@@ -204,7 +239,13 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         let pileIndex1 = find(p1pileDisplay, cardView)!
         let pileIndex2 = find(p1pileDisplay, currentCard!)!
         gameplay.swap(pile, pileIndex1: pileIndex1, pileIndex2: pileIndex2)
-        displayP1Pile()
+        UIView.animateWithDuration(0.25, animations: {
+            self.p1pileDisplay[pileIndex1].frame.origin = self.getP1CardPosition(pileIndex2)
+            self.p1pileDisplay[pileIndex2].frame.origin = self.getP1CardPosition(pileIndex1)
+        })
+        let temp = p1pileDisplay[pileIndex1]
+        p1pileDisplay[pileIndex1] = p1pileDisplay[pileIndex2]
+        p1pileDisplay[pileIndex2] = temp
     }
     
     func checkForGameOver() {
@@ -243,7 +284,9 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
 
 
 //////////////////// AI
+
     
+
     func basicAI() {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
             while (!self.gameplay.gameIsOver()) {
@@ -257,7 +300,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                     for pileIndex in 0..<4 {
                         if pile[pileIndex].rank != target {
                             self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex: middleIndex)
-                            self.p2exchangeMade(pileNumber, middleIndex: middleIndex)
+                            self.p2exchangeMade(pileNumber, pileIndex: pileIndex, middleIndex: middleIndex)
                         }
                     }
                 } else {
@@ -268,7 +311,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                                 println("placing card in middle")
                                 let middleIndex = Int(arc4random_uniform(UInt32(4)))
                                 self.gameplay.exchange(self.gameplay.p2piles[otherPileNumber], pileIndex: pileIndex,  middleIndex: middleIndex)
-                                self.p2exchangeMade(otherPileNumber, middleIndex: middleIndex)
+                                self.p2exchangeMade(otherPileNumber, pileIndex: pileIndex, middleIndex: middleIndex)
                             } else if Int(arc4random_uniform(UInt32(3))) == 0 {
                                 let pileNumber = Int(arc4random_uniform(UInt32(6)))
                                 let pile = self.gameplay.p2piles[pileNumber]
@@ -277,7 +320,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                                     let middleIndex = Int(arc4random_uniform(UInt32(4)))
                                     println("exchanging random card")
                                     self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex:    middleIndex)
-                                    self.p2exchangeMade(pileNumber, middleIndex: middleIndex)
+                                    self.p2exchangeMade(otherPileNumber, pileIndex: pileIndex, middleIndex: middleIndex)
                                 }
                             }
                         }
@@ -287,12 +330,30 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             }
         })
     }
+
     
-    func p2exchangeMade(pileNumber: Int, middleIndex: Int) {
-        dispatch_async(dispatch_get_main_queue(), {() -> () in
+    func p2exchangeMade(pileNumber: Int, pileIndex: Int, middleIndex: Int) {
+        dispatch_async(dispatch_get_main_queue()) {
             if self.middleDisplay[middleIndex] == self.currentCard {
                 self.currentCard = nil
             }
+            let cardView = CardView(card: self.gameplay.middle[middleIndex])
+            cardView.frame = self.p2pileViews[pileNumber].frame
+            self.gameView.addSubview(cardView)
+            cardView.cardSelectDelegate = self
+            let middleFrame = self.middleDisplay[middleIndex].frame
+            UIView.animateWithDuration(0.25, animations: {
+                self.middleDisplay[middleIndex].frame = self.p2pileViews[pileNumber].frame
+                cardView.frame = middleFrame
+            }, completion: { finished in
+                UIView.animateWithDuration(0.1, animations: {
+                    self.middleDisplay[middleIndex].alpha = 0.0
+                }, completion: { finished in
+                    self.middleDisplay[middleIndex].removeFromSuperview()
+                    self.middleDisplay[middleIndex] = cardView
+                })
+            })
+            
             let pile = self.gameplay.p2piles[pileNumber]
             if pile.isCompleted {
                 println("pile completed")
@@ -303,11 +364,11 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                 pileView.frame.origin = position
                 self.gameView.addSubview(pileView)
             }
-            self.displayMiddle()
             self.checkForGameOver()
-        })
+        }
         usleep(DelayTime)
     }
+
 
     func mostCommonRankIn(pile: Pile) -> Int {
         var counts = [0, 0, 0, 0]
@@ -374,4 +435,5 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
             }
         }
     }
+
 }

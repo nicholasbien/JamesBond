@@ -53,7 +53,7 @@ class CardView: UIImageView {
         self.userInteractionEnabled = true
     }
     
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         cardSelectDelegate?.cardSelected(self)
     }
     

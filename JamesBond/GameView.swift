@@ -16,7 +16,7 @@ class GameView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override init() {
+    init() {
         super.init(frame: CGRectMake(0, 0, ScreenWidth, ScreenHeight))
     }
     

@@ -15,24 +15,29 @@ class ViewController: UIViewController {
         controller = GameController()
         super.init(coder: aDecoder)
     }
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+        let gameView = GameView()
+        gameView.controller = self.controller
         let background = UIImage(named: BackgroundImage)
         let backgroundView = UIImageView(image: background)
         self.view.addSubview(backgroundView)
-        let gameView = GameView()
-        gameView.controller = self.controller
         self.view.addSubview(gameView)
         controller.gameView = gameView
         controller.dealCards()
-        controller.basicAI()
+        //controller.basicAI()
+        
+            delay(2) {
+               self.controller.basicAI()
+        }
 
+    }
+    
     func update() {
         controller.basicAI()
     }
-}
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
