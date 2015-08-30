@@ -207,7 +207,6 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
         let pileNumber = find(p1pileViews, self.currentPile!)!
         let pile = gameplay.p1piles[pileNumber]
         var middleIndex = find(middleDisplay, self.currentCard!)
-        print(middleIndex)
         var pileIndex: Int?
         if middleIndex != nil {
             pileIndex = find(self.p1pileDisplay, cardView)!
@@ -320,7 +319,7 @@ class GameController: CardSelectProtocol, PileDisplayProtocol {
                                     let middleIndex = Int(arc4random_uniform(UInt32(4)))
                                     println("exchanging random card")
                                     self.gameplay.exchange(pile, pileIndex: pileIndex, middleIndex:    middleIndex)
-                                    self.p2exchangeMade(otherPileNumber, pileIndex: pileIndex, middleIndex: middleIndex)
+                                    self.p2exchangeMade(pileNumber, pileIndex: pileIndex, middleIndex: middleIndex)
                                 }
                             }
                         }
